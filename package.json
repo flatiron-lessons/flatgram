@@ -1,0 +1,7 @@
+{
+  "name": "flatiron-gram",
+  "private": true,
+  "dependencies": {
+    "semantic-ui": "^2.2.13"
+  }
+}

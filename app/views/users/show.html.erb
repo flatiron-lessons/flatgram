@@ -1,0 +1,18 @@
+<h1> <%= @user.username %></h1>
+User: <%= @user.username %><br>
+Email: <%= @user.email %><br>
+Password: <%= @user.password_digest %><br>
+
+<!-- Create new picture -->
+<% if session[:user_id] == @user.id %>
+	<%= link_to 'Add a New Picture', new_picture_path %><br><br>
+<% end %>
+
+<!-- All the user's pictures -->
+<% @user.pictures.select do |pic| %>
+	
+	<img src="<%= pic.image_url %>" width="200" height="100" ><br>
+
+	<%= link_to "View Comments", picture_path(pic) %> /
+	<%= link_to "Delete Photo", picture_path(pic), method: "DELETE" %><br><br>
+<% end %>

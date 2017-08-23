@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FlatironGram</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+  <div class="navigation" style="color:#FFFFFF">
+      <%= link_to 'Home', root_path %>
+      <% if logged_in? %>
+        <%= link_to 'All Users', users_path %>
+        <%= link_to 'My Profile', user_path(session[:user_id]) %>
+      	<%= link_to 'logout', logout_path %>
+      <% else %>
+      	<%= link_to 'Login', login_path %>
+      <% end %>
+  </div>
+    <%= yield %>
+  </body>
+</html>

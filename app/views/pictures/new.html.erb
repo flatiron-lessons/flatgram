@@ -1,0 +1,20 @@
+<h1> Post a picture! </h1>
+
+<%= form_for @picture do |f| %>
+	<%= f.label 'Picture URL' %><br>
+	<%= f.text_field :image_url, required: true %><br><br>
+
+	<%= f.label 'Give your picture a title!' %><br>
+	<%= f.text_field :title, required: true %><br><br>
+
+	<%= f.label 'Select tags from below!' %><br>
+	<%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :name) %><br><br>
+		Or create a new tag! (you can also do both)<br>
+	<%= fields_for :tag do |tag_form| %>
+		<%= tag_form.label :name %>
+		<%= tag_form.text_field :name %><br><br>
+	<% end %>
+
+	<%= f.submit %>
+
+<% end %>

@@ -1,0 +1,19 @@
+<h3> Thanks for signing up! </h3>
+
+<!-- if already signed up we don't want this page to render -->
+
+<%= form_for @user do |f| %>
+	<%= f.label :email %><br>
+	<%= f.text_field :email, required: true %><br><br>
+
+	<%= f.label :username %><br>
+	<%= f.text_field :username, required: true %><br><br>
+
+	<%= f.label :password %><br>
+	<%= f.password_field :password, required: true %><br><br>
+
+	<%= f.label :password_confirmation %><br>
+	<%= f.password_field :password_confirmation, required: true %><br><br>
+
+	<%= f.submit %>
+<% end %>
