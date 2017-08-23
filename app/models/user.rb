@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 	validates :username, uniqueness: true
 	has_secure_password
 
+	has_many :likes
 	has_many :pictures
 	has_many :comments
 	has_many :picture_tags, through: :pictures
@@ -19,5 +20,10 @@ class User < ActiveRecord::Base
 				# does a comment have content? at the moment - no.
 			end
 		end
+	end
+
+	# james.like(user_id: self.id, picture_id: 5)
+	def liked?(picture)
+		self.likes.find_by(user_id: self.id, picture_id: picture.id).present?
 	end
 end

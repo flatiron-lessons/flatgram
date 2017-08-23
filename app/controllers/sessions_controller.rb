@@ -8,13 +8,11 @@ class SessionsController < ApplicationController
 
 	def create
 		@user = User.find_by(email: params[:email])
-		if @user
-			return head(:forbidden) unless @user.authenticate(params[:password])
-
+		if @user && @user.authenticate(params[:password])		
 			session[:user_id] = @user.id
 			redirect_to "/users/#{@user.id}"
 		else
-			render :new
+			redirect_to :new
 		end
 	end
 

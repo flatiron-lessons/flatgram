@@ -1,7 +1,8 @@
-<h3> Thanks for signing up! </h3>
+<fieldset>
+<legend> Thanks for signing up! </legend>
 
 <!-- if already signed up we don't want this page to render -->
-
+<div>
 <%= form_for @user do |f| %>
 	<%= f.label :email %><br>
 	<%= f.text_field :email, required: true %><br><br>
@@ -16,4 +17,6 @@
 	<%= f.password_field :password_confirmation, required: true %><br><br>
 
 	<%= f.submit %>
+</div>
 <% end %>
+</fieldset>

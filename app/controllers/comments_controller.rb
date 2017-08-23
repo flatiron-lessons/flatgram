@@ -19,11 +19,21 @@ class CommentsController < ApplicationController
 
 	def show
 		authentication_required
+		@comment = Comment.find()
+	end
+
+	def edit
+		# byebug
 		@comment = Comment.find(params[:id])
 	end
 
 	def update
-		byebug
+		@comment = Comment.find(params[:id])
+		if @comment.update(comment_params)
+			redirect_to picture_path(@comment.picture_id)
+		else
+			render :new
+		end
 	end
 
 	def destroy

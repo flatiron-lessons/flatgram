@@ -1,3 +1,6 @@
+<fieldset>
 <% @tag.pictures.each do |pic| %>
+	<h3><%= pic.title %></h3>
 	<img src="<%= pic.image_url %>" >
 <% end %>
+</fieldset>

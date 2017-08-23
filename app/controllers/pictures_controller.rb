@@ -1,16 +1,18 @@
 class PicturesController < ApplicationController
-	before_action :authentication_required
+	before_action :authentication_required, only: [:create, :show]
 
 	def new
 		@picture = Picture.new
 	end
 
 	def create
-		authentication_required
 		@picture = Picture.create(picture_params)
 		@user = User.find(session[:user_id])
 		@picture.user = @user
-		@picture.tags << Tag.create(name: params[:tag][:name])
+
+		if params[:picture][:tag]
+			@picture.tags << Tag.create(name: params[:picture][:tag][:name])
+		end
 
 		if @picture.save
 			redirect_to @picture
@@ -20,7 +22,7 @@ class PicturesController < ApplicationController
 	end
 
 	def show
-		authentication_required
+		@comment = Comment.new
 		@picture = Picture.find(params[:id])
 	end
 
@@ -30,7 +32,7 @@ class PicturesController < ApplicationController
 
 	def destroy
 		Picture.find(params[:id]).delete
-		render "users/#{session[:user_id]}"
+		redirect_to user_path("#{current_user.id}")
 	end
 
 	private

@@ -1,8 +1,6 @@
-<h1> <%= @user.username %></h1>
-User: <%= @user.username %><br>
-Email: <%= @user.email %><br>
-Password: <%= @user.password_digest %><br>
-
+<fieldset>
+<h1><%= @user.username %></h1>
+<div>
 <!-- Create new picture -->
 <% if session[:user_id] == @user.id %>
 	<%= link_to 'Add a New Picture', new_picture_path %><br><br>
@@ -13,6 +11,32 @@ Password: <%= @user.password_digest %><br>
 	
 	<img src="<%= pic.image_url %>" width="200" height="100" ><br>
 
-	<%= link_to "View Comments", picture_path(pic) %> /
-	<%= link_to "Delete Photo", picture_path(pic), method: "DELETE" %><br><br>
+	<%= link_to "(#{pic.comments.count}) Comments", picture_path(pic) %> / 
+	<%= "#{pic.likes.count} likes" %>
+	
+	<% if current_user.liked?(pic) %>
+	<!-- form to 'unlike' picture -->
+		<%= form_for @like, method: "DELETE", url: like_path do |f| %>
+			<%= f.hidden_field :user_id, value: current_user.id %>
+			<%= f.hidden_field :picture_id, value: pic.id %>
+
+			<%= f.submit '💔️' %>
+		<% end %>
+	<% else %>
+	<!-- form to like picture -->
+		<%= form_for @like do |f| %>
+			<%= f.hidden_field :user_id, value: current_user.id %>
+			<%= f.hidden_field :picture_id, value: pic.id %>
+
+			<%= f.submit '❤️' %>
+		<% end %>
+	<% end %>
+
+	<% if current_user.id == pic.user.id %>
+		<%= link_to "Delete Photo", picture_path(pic), method: "DELETE" %><br><br>
+	<% end %>
+</div>
 <% end %>
+</fieldset>
+
+<!-- link_to method: "POST" -->

@@ -1,1 +1,7 @@
-edit form that posts to UPDATE
+<%= form_for @comment do |f| %>
+
+	<%= f.label 'Edit Comment' %><br>
+	<%= f.text_area 'content', required: true %><br><br>
+
+	<%= f.submit 'Edit Comment' %> 
+<% end %><br>

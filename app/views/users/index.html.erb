@@ -1,4 +1,8 @@
-<h3>Users</h3>
-<% @users.each do |user| %>
-	<li><%= link_to user.username, user_path(user) %></li>
-<% end %>
+<fieldset>
+<h1>Users</h1>
+<div>
+	<% @users.each do |user| %>
+		<li><%= link_to user.username, user_path(user) %></li>
+	<% end %>
+</div>
+</fieldset>
