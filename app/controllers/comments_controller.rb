@@ -1,12 +1,11 @@
 class CommentsController < ApplicationController
-	before_action :authentication_required
+	before_action :authentication_required, only: [:create, :show, :edit]
 
 	def new
 		@comment = Comment.new
 	end
 
 	def create
-		authentication_required
 		@comment = Comment.create(comment_params)
 		@comment.user = User.find_by(id: session[:user_id])
 
@@ -18,12 +17,10 @@ class CommentsController < ApplicationController
 	end
 
 	def show
-		authentication_required
 		@comment = Comment.find()
 	end
 
 	def edit
-		# byebug
 		@comment = Comment.find(params[:id])
 	end
 

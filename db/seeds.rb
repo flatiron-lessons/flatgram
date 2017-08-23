@@ -28,7 +28,7 @@ end
 
 
 Picture.create(
-	image_url: url,
-	title: "Saw a Dolphin",
+	image_url: "http://image.nj.com/home/njo-media/width620/img/ledgerupdates_impact/photo/2017/07/30/solar-eclipse-90c6f8d61484af0e.jpg",
+	title: "Solar Eclipse!",
 	user_id: User.first.id
 	)

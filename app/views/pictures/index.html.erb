@@ -1,4 +1,8 @@
-<% @pictures.reverse.each do |p| %>
-	<img src="<%= p.image_url %>" width="200" height="100">
-	<!-- add button -->
-<% end %>
+<h1> Flatiron Gram </h1>
+<h3> Here's what users have posted recently! </h3>
+<fieldset>
+	<% Picture.all.each do |pic| %>
+		<%= link_to "#{pic.user.username}", user_path(pic.user) %> @ <%= pic.created_at %><br>
+		<img src="<%= pic.image_url %>" width="300px" height="200px">
+	<% end %>
+</fieldset>
