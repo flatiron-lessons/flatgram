@@ -7,8 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 users = [1,2,3,4,5,6,7,8,9,10]
-tags = ["Fall", "winter", "summer", "spring", "NYC", "nature"]
-url = "http://www.defenders.org/sites/default/files/styles/large/public/dolphin-kristian-sekulic-isp.jpg"
 
 users.each do |num|
 	User.create(
@@ -19,16 +17,26 @@ users.each do |num|
 		)
 end
 
-
-tags.each do |tag|
-	Tag.create(
-		name: tag
-		)
-end
-
+Picture.create(
+	image_url: "http://ghk.h-cdn.co/assets/16/09/980x490/landscape-1457107485-gettyimages-512366437.jpg",
+	title: "Puppy",
+	user_id: User.second.id
+	)
 
 Picture.create(
-	image_url: "http://image.nj.com/home/njo-media/width620/img/ledgerupdates_impact/photo/2017/07/30/solar-eclipse-90c6f8d61484af0e.jpg",
-	title: "Solar Eclipse!",
+	image_url: "https://cdn-image.realsimple.com/sites/default/files/styles/rs_horizontal_image_4/public/puppy-running.jpg?itok=KFryFqUj",
+	title: "Puppy",
+	user_id: User.last.id
+	)
+
+Picture.create(
+	image_url: "http://cdn.akc.org/content/hero/header(1).jpg",
+	title: "Puppy",
 	user_id: User.first.id
+	)
+
+Picture.create(
+	image_url: "https://i.pinimg.com/736x/8a/9d/85/8a9d85afc3587ec126082715a0b55a5c--happy-puppy-puppy-love.jpg",
+	title: "Puppy",
+	user_id: User.third.id
 	)

@@ -26,4 +26,8 @@ class User < ActiveRecord::Base
 	def liked?(picture)
 		self.likes.find_by(user_id: self.id, picture_id: picture.id).present?
 	end
+
+	def self.search(search)
+ 	 where("username LIKE ?", "%#{search}%") 
+	end
 end

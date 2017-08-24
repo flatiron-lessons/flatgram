@@ -19,7 +19,13 @@
       <a class="item"><u><%= link_to 'Home', root_path %></u></a>
       <% if logged_in? %>
         <a class="item"><u><%= link_to 'All Users', users_path %></u></a>
+        <a class="item"><u><%= link_to 'All Pictures', pictures_path %></u></a>
+        <a class="item"><u><%= link_to 'All Tags', tags_path %></u></a>
         <a class="item"><u><%= link_to 'My Profile', user_path(session[:user_id]) %></u></a>
+        <%= form_tag(users_path, method: "GET", id: "search-form") do %>
+          <%= text_field_tag :search, params[:search], placeholder: "Search Users" %>
+          <%= submit_tag "Search", name: nil %>
+        <% end %>
       	<a class="item">You're logged in as <%= current_user.username %>! <u><%= link_to 'Logout', logout_path %></u></a>
       <% else %>
       	<a class="item"><u><%= link_to 'Login', login_path %></u></a>

@@ -1,6 +1,8 @@
+<h1> All posts with tag: <%= @tag.name %> </h1>
+
 <fieldset>
 <% @tag.pictures.each do |pic| %>
-	<h3><%= pic.title %></h3>
+	<h3><%= link_to pic.title, picture_path(pic) %></h3>
 	<img src="<%= pic.image_url %>" >
 <% end %>
 </fieldset>

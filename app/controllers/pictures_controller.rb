@@ -22,6 +22,7 @@ class PicturesController < ApplicationController
 	end
 
 	def show
+		@like = Like.new
 		@comment = Comment.new
 		@picture = Picture.find(params[:id])
 	end

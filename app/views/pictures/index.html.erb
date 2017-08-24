@@ -2,7 +2,10 @@
 <h3> Here's what users have posted recently! </h3>
 <fieldset>
 	<% Picture.all.each do |pic| %>
-		<%= link_to "#{pic.user.username}", user_path(pic.user) %> @ <%= pic.created_at %><br>
-		<img src="<%= pic.image_url %>" width="300px" height="200px">
+	<div class="ui centered medium image">
+		<%= link_to "#{pic.title}", picture_path(pic) %><br> 
+		by: <%= link_to "#{pic.user.username}", user_path(pic.user) %> @ <%= pic.created_at %><br>
+		<img  src="<%= pic.image_url %>" width="600px" height="400px"><br><br>
+	</div>
 	<% end %>
 </fieldset>

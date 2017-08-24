@@ -10,9 +10,22 @@
 <% @user.pictures.select do |pic| %>
 	
 	<img src="<%= pic.image_url %>" width="200" height="100" ><br>
-
-	<%= link_to "(#{pic.comments.count}) Comments", picture_path(pic) %> / 
-	<%= "#{pic.likes.count} likes" %>
+	<% if pic.comments.count == 1 %>
+		<%= link_to "(#{pic.comments.count}) Comment", picture_path(pic) %> / 
+	<% else %>
+		<%= link_to "(#{pic.comments.count}) Comments", picture_path(pic) %> / 
+	<% end %>
+	<% if pic.likes.count == 1 %>
+		<% if current_user.liked?(pic) %>
+			<%= "You like this picture" %>
+		<% else %>
+			<%= "#{pic.likes.count} user likes this." %>
+		<% end %>
+	<% elsif pic.likes.count > 1 %>
+		<%= "#{pic.likes.count} users like this." %>
+	<% else %>
+		<%= "Be the first to show this picture some love!" %>
+	<% end %>
 	
 	<% if current_user.liked?(pic) %>
 	<!-- form to 'unlike' picture -->
@@ -21,6 +34,10 @@
 			<%= f.hidden_field :picture_id, value: pic.id %>
 
 			<%= f.submit '💔️' %>
+			<% if current_user.id == pic.user.id %>
+				<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
+			<% end %>
+			<br><br>
 		<% end %>
 	<% else %>
 	<!-- form to like picture -->
@@ -28,13 +45,17 @@
 			<%= f.hidden_field :user_id, value: current_user.id %>
 			<%= f.hidden_field :picture_id, value: pic.id %>
 
-			<%= f.submit '❤️' %>
+			<%= f.submit '❤️' %> 
+			<% if current_user.id == pic.user.id %>
+				<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
+			<% end %>
+			<br><br>
 		<% end %>
 	<% end %>
 
-	<% if current_user.id == pic.user.id %>
-		<%= link_to "Delete Photo", picture_path(pic), method: "DELETE" %><br><br>
-	<% end %>
+	<!--  if current_user.id == pic.user.id %>
+		  link_to "🗑️", picture_path(pic), method: "DELETE" %><br><br>
+	 end %> -->
 </div>
 <% end %>
 </fieldset>
