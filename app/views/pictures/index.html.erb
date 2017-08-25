@@ -3,63 +3,6 @@
 
 <div class="ui four centered doubling cards">
 	<% @pictures.reverse.each do |pic| %>
-	<div class="ui fluid card">
-	  <div class="content">
-	    <div class="right floated meta"><%= (pic.created_at.strftime("%d %b. %y")) %></div>
-	    <img class="ui avatar image" src=""><%= link_to pic.user.username, user_path(pic.user) %>
-	  </div>
-	  
-	  <img class="ui image" src="<%= pic.image_url %>" height="200px">
-	  
-	  <div class="content">
-	    <span class="right floated">
-		    <% if pic.likes.count == 1 %>
-				<% if current_user.liked?(pic) %>
-					<p><%= "You liked this picture." %></p>
-				<% else %>
-					<p><%= "#{pic.likes.count} user likes this." %></p>
-				<% end %>
-			<% elsif pic.likes.count > 1 %>
-				<p><%= "#{pic.likes.count} users like this." %></p>
-			<% else %>
-				<p><%= "Like me!" %></p>
-			<% end %>
-
-		<!-- Logic for like button -->
-			<% if current_user.liked?(pic) %>
-			<!-- form to 'unlike' picture -->
-			  	<% like = current_user.likes.find_by(picture_id: pic.id) %>
-				<%= form_for(like, method: "DELETE", url: like_path(like)) do |f| %>
-					<%= f.hidden_field :user_id, value: current_user.id %>
-					<%= f.hidden_field :picture_id, value: pic.id %>
-
-					<%= f.submit '💔️' %>
-					<br><br>
-				<% end %>
-			<% else %>
-			<!-- form to like picture -->
-				<%= form_for @like do |f| %>
-					<%= f.hidden_field :user_id, value: current_user.id %>
-					<%= f.hidden_field :picture_id, value: pic.id %>
-
-					<%= f.submit '❤️' %> 
-					<br><br>
-				<% end %>
-			<% end %>
-		<!-- end like button logic -->
-
-	    </span>
-			<% if pic.comments.count == 1 %>
-				<p><%= link_to "#{pic.comments.count} Comment", picture_path(pic) %></p>
-			<% else %>
-				<p><%= link_to "#{pic.comments.count} Comments", picture_path(pic) %></p>
-			<% end %><br>
-			<% if !pic.tags.empty? %>
-				<% pic.tags.first(3).each do |tag| %>
-					<%= "##{tag.name}" %>
-				<% end %>
-			<% end %>	
-	  </div>
-	</div>
+		<%= render partial: "card", locals: {pic: pic} %>
 	<% end %>
 </div>	
