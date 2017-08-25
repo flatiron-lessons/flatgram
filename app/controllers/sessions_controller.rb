@@ -12,12 +12,12 @@ class SessionsController < ApplicationController
 			session[:user_id] = @user.id
 			redirect_to "/users/#{@user.id}"
 		else
-			redirect_to :new
+			redirect_to login_path
 		end
 	end
 
 	def destroy
   	session.delete :user_id
-  	redirect_to '/'
+  	redirect_to root_path
 	end
 end

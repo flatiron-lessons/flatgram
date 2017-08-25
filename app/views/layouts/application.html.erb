@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-
-    <body>
-      <h1 style="width:0px; margin:0 auto;">
-        FG
-      </h1>
-    </body>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>  
-  <fieldset>
-  <nav class="ui meni">
-      <a class="item"><u><%= link_to 'Home', root_path %></u></a>
-      <% if logged_in? %>
-        <a class="item"><u><%= link_to 'All Users', users_path %></u></a>
-        <a class="item"><u><%= link_to 'All Pictures', pictures_path %></u></a>
-        <a class="item"><u><%= link_to 'All Tags', tags_path %></u></a>
-        <a class="item"><u><%= link_to 'My Profile', user_path(session[:user_id]) %></u></a>
-        <%= form_tag(users_path, method: "GET", id: "search-form") do %>
-          <%= text_field_tag :search, params[:search], placeholder: "Search Users" %>
-          <%= submit_tag "Search", name: nil %>
+  <body>
+
+    <h1 style="width:0px; margin:0 auto;"> FG </h1>
+    <div class="nav_margins">
+      <div class="ui secondary  menu">        
+        <% if logged_in? %>
+        <div class="link item"><%= link_to 'My Feed', root_path %></div>
+        <div class="link item"><%= link_to 'My Profile', user_path(session[:user_id]) %></div>        
+        <div class="link item"><%= link_to 'All Users', users_path %></div>
+        <div class="link item"><%= link_to 'All Pictures', pictures_path %></div>
+        <div class="link item"><%= link_to 'All Tags', tags_path %></div>  
+        <div class="link item"><%= link_to 'Logout', logout_path %></div>
+        <div class="right menu">
+          <div class="item">
+            <div class="ui icon input">
+            <%= form_tag(users_path, method: "GET", id: "search-form") do %>
+              <%= text_field_tag :search, params[:search], placeholder: "Search Users" %>
+              <i class="search link icon"><% submit_tag :nil, name: nil %></i>
+            <% end %>
+            </div>
+          </div>
+        </div>
+        <% else %>
+        <div class="link item"><%= link_to 'Home', root_path %></div>
+        <div class="link item"><%= link_to 'Login', login_path %></div>
+        <div class="link item"><%= link_to 'Sign Up', signup_path %></div>
         <% end %>
-      	<a class="item">You're logged in as <%= current_user.username %>! <u><%= link_to 'Logout', logout_path %></u></a>
-      <% else %>
-      	<a class="item"><u><%= link_to 'Login', login_path %></u></a>
-        <a class="item"><u><%= link_to 'Sign Up', signup_path %></u></a>
-      <% end %>
-  </nav>
-  </fieldset>
-    <%= yield %>
+      </div>
+    </div>
+    <div class="ui container">  
+      <%= yield %>
+    </div>
   </body>
 </html>
+

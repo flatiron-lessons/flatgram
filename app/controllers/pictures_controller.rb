@@ -6,7 +6,11 @@ class PicturesController < ApplicationController
 	end
 
 	def create
-		@picture = Picture.create(picture_params)
+		@picture = Picture.create(
+		image_url: params[:picture][:image_url], 
+		title: params[:picture][:title], 
+		tag_ids: params[:picture][:tag_ids]
+			)
 		@user = User.find(session[:user_id])
 		@picture.user = @user
 
@@ -28,6 +32,7 @@ class PicturesController < ApplicationController
 	end
 
 	def index
+		@like = Like.new
 		@pictures = Picture.all
 	end
 
@@ -36,9 +41,9 @@ class PicturesController < ApplicationController
 		redirect_to user_path("#{current_user.id}")
 	end
 
-	private
+	# private
 
-	def picture_params
-		params.require(:picture).permit(:image_url, :title, tag_ids: [])
-	end
+	# def picture_params
+	# 	params.require(:picture).permit(:image_url, :title, tag_ids: [])
+	# end
 end

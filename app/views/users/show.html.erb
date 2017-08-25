@@ -1,63 +1,70 @@
-<fieldset>
 <h1><%= @user.username %></h1>
-<div>
+<%= link_to "Edit or Delete Account", edit_user_path(@user) %><br><br>
+Following: <%= @user.following.count %><br>
+Followers: <%= @user.followers.count %>
+<% unless current_user == @user %>
+  <div id="follow_form">
+  <% if current_user.following?(@user) %>
+    <%= render 'unfollow' %>
+  <% else %>
+    <%= render 'follow' %>
+  <% end %>
+  </div>
+<% end %><br>
+
 <!-- Create new picture -->
 <% if session[:user_id] == @user.id %>
 	<%= link_to 'Add a New Picture', new_picture_path %><br><br>
 <% end %>
 
 <!-- All the user's pictures -->
-<% @user.pictures.select do |pic| %>
-	
-	<img src="<%= pic.image_url %>" width="200" height="100" ><br>
-	<% if pic.comments.count == 1 %>
-		<%= link_to "(#{pic.comments.count}) Comment", picture_path(pic) %> / 
-	<% else %>
-		<%= link_to "(#{pic.comments.count}) Comments", picture_path(pic) %> / 
-	<% end %>
-	<% if pic.likes.count == 1 %>
-		<% if current_user.liked?(pic) %>
-			<%= "You like this picture" %>
+<div class="ui stackable four column grid">
+	<% @user.pictures.select do |pic| %>
+	<div class="column">	
+		<img src="<%= pic.image_url %>" width="200" height="100" ><br>
+		<%= link_to 'View Picture', picture_path(pic) %><br>
+		<% if pic.comments.count == 1 %>
+			<%= link_to "(#{pic.comments.count}) Comment", picture_path(pic) %> / 
 		<% else %>
-			<%= "#{pic.likes.count} user likes this." %>
+			<%= link_to "(#{pic.comments.count}) Comments", picture_path(pic) %> / 
 		<% end %>
-	<% elsif pic.likes.count > 1 %>
-		<%= "#{pic.likes.count} users like this." %>
-	<% else %>
-		<%= "Be the first to show this picture some love!" %>
-	<% end %>
-	
-	<% if current_user.liked?(pic) %>
-	<!-- form to 'unlike' picture -->
-		<%= form_for @like, method: "DELETE", url: like_path do |f| %>
-			<%= f.hidden_field :user_id, value: current_user.id %>
-			<%= f.hidden_field :picture_id, value: pic.id %>
-
-			<%= f.submit '💔️' %>
-			<% if current_user.id == pic.user.id %>
-				<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
+		<% if pic.likes.count == 1 %>
+			<% if current_user.liked?(pic) %>
+				<%= "You like this picture" %>
+			<% else %>
+				<%= "#{pic.likes.count} user likes this." %>
 			<% end %>
-			<br><br>
+		<% elsif pic.likes.count > 1 %>
+			<%= "#{pic.likes.count} users like this." %>
+		<% else %>
+			<%= "Like me!" %>
 		<% end %>
-	<% else %>
-	<!-- form to like picture -->
-		<%= form_for @like do |f| %>
-			<%= f.hidden_field :user_id, value: current_user.id %>
-			<%= f.hidden_field :picture_id, value: pic.id %>
+		
+		<% if current_user.liked?(pic) %>
+		<!-- form to 'unlike' picture -->
+			<%= form_for @like, method: "DELETE", url: like_path do |f| %>
+				<%= f.hidden_field :user_id, value: current_user.id %>
+				<%= f.hidden_field :picture_id, value: pic.id %>
 
-			<%= f.submit '❤️' %> 
-			<% if current_user.id == pic.user.id %>
-				<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
+				<%= f.submit '💔️' %>
+				<% if current_user.id == pic.user.id %>
+					<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
+				<% end %>
+				<br><br>
 			<% end %>
-			<br><br>
-		<% end %>
-	<% end %>
+		<% else %>
+		<!-- form to like picture -->
+			<%= form_for @like do |f| %>
+				<%= f.hidden_field :user_id, value: current_user.id %>
+				<%= f.hidden_field :picture_id, value: pic.id %>
 
-	<!--  if current_user.id == pic.user.id %>
-		  link_to "🗑️", picture_path(pic), method: "DELETE" %><br><br>
-	 end %> -->
+				<%= f.submit '❤️' %> 
+				<% if current_user.id == pic.user.id %>
+					<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
+				<% end %>
+				<br><br>
+			<% end %>
+		<% end %>
+	</div>
+	<% end %>
 </div>
-<% end %>
-</fieldset>
-
-<!-- link_to method: "POST" -->

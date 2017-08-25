@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_action :authentication_required, only: [:show, :index]
+	before_action :authentication_required, only: [:show, :index, :edit, :destroy]
 
 	def new
 		@user = User.new
@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 			redirect_to @user
 		else
 			render :new
-			# flash[:message] = ""
+			flash[:message] = "Error, please try again."
 		end
 	end
 
@@ -29,6 +29,31 @@ class UsersController < ApplicationController
 	    @users = User.all.order("created_at DESC")
 	  end
 	end
+
+	def edit
+		@user = User.find_by(id: params[:id])
+	end
+
+	def update
+		@user = User.find_by(id: params[:id])
+		@user.email = params[:user][:email]
+		@user.username = params[:user][:username]
+		if @user.save
+			redirect_to user_path @user
+		else
+			render :edit
+			flash[:message] = "There was a problem with edit at this time. We may already be working on this issue, but just in case, please shoot us an email: sitemaintenance@jm.com."
+		end		
+	end
+
+	def destroy
+		@user = User.find_by(id: params[:id])
+		@clear_pics = Picture.all.select{|pic| pic.user_id == @user.id}
+		@clear_pics.each{ |pic| pic.delete }
+		@user.delete
+		redirect_to '/logout'
+	end
+
 
 	private
 

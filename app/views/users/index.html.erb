@@ -1,16 +1,47 @@
-<fieldset>
-<h1>Users</h1>
+<h1>Users</h1><br>	
 
-<% if @users.blank? %>
-  	<h4>There are no users containing the term <%= params[:search] %>.</h4>
-<% else %>
-	<h4> Here are the results of your search for: <%= params[:search] %>. </h4>
-<% end %>
 
-<div>
+<div class="ui three column grid">
+  <div class="ui cards">
 	<% @users.each do |user| %>
-		<li><%= link_to user.username, user_path(user) %></li>
-		Pictures: <%= user.pictures.count %><br><br>
+	  <div class="card">
+	    <div class="content">	      
+	      <div class="meta"></div>
+	      <div class="ui two column very relaxed grid">
+	      	<div class="column">
+	      		<%= link_to user.username, user_path(user) %><br><br>
+	      		<% unless current_user == user %>
+				  <div id="follow_form">
+				  <% if current_user.following?(user) %>
+				    <%= form_for(current_user.active_relationships.find_by(followed_id: user.id),
+					             html: { method: :delete }) do |f| %>
+					  <%= f.submit "Unfollow", class: "btn" %>
+					<% end %>
+				  <% else %>
+				    <%= form_for(current_user.active_relationships.build) do |f| %>
+					  <div><%= hidden_field_tag :followed_id, user.id %></div>
+					  <%= f.submit "Follow", class: "btn btn-primary" %>
+					<% end %>
+				  <% end %>
+				  </div>
+				<% end %>
+		        Pictures: <%= user.pictures.count %><br>
+		        Followers: <%= user.followers.count %><br>
+		        Following: <%= user.following.count %><br>
+	        </div>
+	        <div class="column">
+	        	<% if !user.pictures.empty? %>
+	        		<%= link_to 'Last Post:', picture_path(user.pictures.last) %><br>
+	        	
+	        		<img src="<%= user.pictures.last.image_url %>" height="75px" width="75px">
+	        	<% else %>
+	        		Last Post: <br>
+	        		<br>That user hasn't posted anything yet!
+	        	<% end %>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
 	<% end %>
+  </div>
 </div>
-</fieldset>

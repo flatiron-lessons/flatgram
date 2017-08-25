@@ -1,27 +1,111 @@
-	<h1> Flatiron Gram </h1>
 
-	<% if !session[:user_id] %>
-		<legend> We value our users' privacy. Please sign in to start checking out some content! </legend>
-		<%= form_tag(sessions_path) do %>
-		<fieldset>
-			Email: <%= text_field_tag :email, nil, required: true %>
-			Password: <%= password_field_tag :password, nil, required: true %>
-			<%= submit_tag 'Login!' %>
-		<% end %>
-		</fieldset>
+
+<% if !session[:user_id] %>
+	<br><br><h3 align="center">We value our users' privacy. Please sign in to start checking out some content!</h3>
+<% else %>
+	<h1> Your Feed: </h1>
+<% end %>
+
+<% if !session[:user_id] %>
+	<%= form_tag(sessions_path) do %>
+	  <div class="login_margins">
+	    <div class="ui single column middle aligned stackable grid">
+	      <div class="column">
+	        <div class="ui form">
+	          <div class="field">
+	            <label>Email</label>
+	            <div class="ui left icon input">
+	              <%= text_field_tag :email, nil, required: true %>
+	              <i class="user icon"></i>
+	            </div>
+	          </div>
+	          <div class="field">
+	            <label>Password</label>
+	            <div class="ui left icon input">
+	              <%= password_field_tag :password, nil, required: true %>
+	              <i class="lock icon"></i>
+	            </div>
+	          </div>
+	          <div align="center">
+	            <%= submit_tag 'Login!', class: "ui blue submit button" %>
+	            Not a user? <%= link_to 'Sign Up!', signup_path %>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
 	<% end %>
+<% else %>
+	<% if !current_user.following.empty? %>
+		<legend> Recent posts by users you're following: </legend><br>
+			<% all_pictures = [] %>
+			<% current_user.following.each do |following| %>
+				<% following.pictures.each do |picture| %>
+					<% all_pictures << picture %>
+				<% end %>
+			<% end %>
+	<div>
+	<div class="ui four centered doubling cards">
+		<% all_pictures.each do |pic| %>
+		<div class="ui fluid card">
+		  <div class="content">
+		    <div class="right floated meta"><%= (pic.created_at.strftime("%d %b. %y")) %></div>
+		    <img class="ui avatar image" src=""> <%= link_to pic.user.username, user_path(pic.user) %>
+		  </div>
+		  
+		  <img class="ui image" src="<%= pic.image_url %>" height="200px">
+		  
+		  <div class="content">
+		    <span class="right floated">
+			    <% if pic.likes.count == 1 %>
+					<% if current_user.liked?(pic) %>
+						<p><%= "You liked this picture." %></p>
+					<% else %>
+						<p><%= "#{pic.likes.count} user likes this." %></p>
+					<% end %>
+				<% elsif pic.likes.count > 1 %>
+					<p><%= "#{pic.likes.count} users like this." %></p>
+				<% else %>
+					<p><%= "Like me!" %></p>
+				<% end %>
 
-<!-- <html>
-	<head>
-	<style>
-		body {
-	    background: url("https://media.timeout.com/images/103444978/image.jpg");
-	    background-size: 1425px 800px;
-	    background-repeat: no-repeat;
-		}
-	</style>
-	</head>
-	<body>
-		<div class="HP-Title"> Flatiron Gram </div>
-	</body>
-</html> -->
+		<!-- Logic for like button -->
+			<% if current_user.liked?(pic) %>
+			<!-- form to 'unlike' picture -->
+			  	<% like = current_user.likes.find_by(picture_id: pic.id) %>
+				<%= form_for(like, method: "DELETE", url: like_path(like)) do |f| %>
+					<%= f.hidden_field :user_id, value: current_user.id %>
+					<%= f.hidden_field :picture_id, value: pic.id %>
+
+					<%= f.submit '💔️' %>
+					<br><br>
+				<% end %>
+			<% else %>
+			<!-- form to like picture -->
+				<%= form_for @like do |f| %>
+					<%= f.hidden_field :user_id, value: current_user.id %>
+					<%= f.hidden_field :picture_id, value: pic.id %>
+
+					<%= f.submit '❤️' %> 
+					<br><br>
+				<% end %>
+			<% end %>
+		<!-- end like button logic -->
+
+		    </span>
+				<% if pic.comments.count == 1 %>
+					<p><%= link_to "#{pic.comments.count} Comment", picture_path(pic) %></p>
+				<% else %>
+					<p><%= link_to "#{pic.comments.count} Comments", picture_path(pic) %></p>
+				<% end %>    	
+		  </div>
+		</div>
+		<% end %>
+	</div>		
+	<% else %>
+		<p> Looks like you prefer to lead... but if you're here toe see pictures, you should probably follow some 	users. Head over to our <%= link_to :users, users_path %> page to follow other users! </p>
+		</div>
+	<% end %>
+<% end %>
+
+

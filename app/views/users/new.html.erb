@@ -1,22 +1,43 @@
-<fieldset>
-<legend> Thanks for signing up! </legend>
+<h3 align="center"> Please sign up! </h3 align="center">
 
-<!-- if already signed up we don't want this page to render -->
-<div>
+
 <%= form_for @user do |f| %>
-	<%= f.label :email %><br>
-	<%= f.text_field :email, required: true %><br><br>
-
-	<%= f.label :username %><br>
-	<%= f.text_field :username, required: true %><br><br>
-
-	<%= f.label :password %><br>
-	<%= f.password_field :password, required: true %><br><br>
-
-	<%= f.label :password_confirmation %><br>
-	<%= f.password_field :password_confirmation, required: true %><br><br>
-
-	<%= f.submit %>
+<div class="login_margins">
+	<div class="ui single column middle aligned very relaxed stackable grid">
+	  <div class="column">
+	    <div class="ui form">
+	      <div class="field">
+	        <label>Email</label>
+	        <div class="ui left icon input">
+	          <%= f.text_field :email, required: true %>
+	          <i class="user icon"></i>
+	        </div>
+	      </div>
+	      <div class="field">
+	        <label>Username</label>
+	        <div class="ui left icon input">
+	          <%= f.text_field :username, required: true %>
+	          <i class="lock icon"></i>
+	        </div>
+	      </div>
+	      <div class="field">
+	        <label>Password</label>
+	        <div class="ui left icon input">
+	          <%= f.password_field :password, required: true %>
+	          <i class="lock icon"></i>
+	        </div>
+	      </div>
+	      <div class="field">
+	        <label>Password Confirmation</label>
+	        <div class="ui left icon input">
+	          <%= f.password_field :password_confirmation, required: true %>
+	          <i class="lock icon"></i>
+	        </div>
+	      </div>
+	      <div align="center">
+	      	<%= f.submit 'Sign Up!', class: "ui blue submit button" %>
+	      </div>
+	    </div>
+	</div>
 </div>
 <% end %>
-</fieldset>
