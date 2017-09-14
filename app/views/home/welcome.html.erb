@@ -50,7 +50,7 @@
 		<div class="ui fluid card">
 		  <div class="content">
 		    <div class="right floated meta"><%= (pic.created_at.strftime("%d %b. %y")) %></div>
-		    <img class="ui avatar image" src=""> <%= link_to pic.user.username, user_path(pic.user) %>
+		    <%= link_to pic.user.username, user_path(pic.user) %>
 		  </div>
 		  
 		  <img class="ui image" src="<%= pic.image_url %>" height="200px">

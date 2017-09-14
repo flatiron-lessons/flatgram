@@ -1,7 +1,7 @@
 <div class="ui fluid card">
 	  <div class="content">
 	    <div class="right floated meta"><%= (pic.created_at.strftime("%d %b. %y")) %></div>
-	    <img class="ui avatar image" src=""><%= link_to pic.user.username, user_path(pic.user) %>
+	    <%= link_to pic.user.username, user_path(pic.user) %>
 	  </div>
 	  
 	  <img class="ui image" src="<%= pic.image_url %>" height="200px">
@@ -11,29 +11,30 @@
 			<% if pic.likes.count == 0 %>
 				<p><%= "Like me!" %></p>
 			<% else %>
-				<p><%= pluralize(pic.likes.count, "user") %> likes this picture.</p>
+				<p><%= pluralize(pic.likes.count, "user") %> likes this picture</p>
 			<% end %>
 
 		<!-- Logic for like button -->
 			<% if current_user.liked?(pic) %>
 			<!-- form to 'unlike' picture -->
 			  	<% like = current_user.likes.find_by(picture_id: pic.id) %>
-				<%= form_for(like, method: "DELETE", url: like_path(like)) do |f| %>
+				<%= form_for like, method: "DELETE", url: like_path(like), html: {style: "display:inline"} do |f| %>
 					<%= f.hidden_field :user_id, value: current_user.id %>
 					<%= f.hidden_field :picture_id, value: pic.id %>
 
 					<%= f.submit '💔️' %>
-					<br><br>
 				<% end %>
 			<% else %>
 			<!-- form to like picture -->
-				<%= form_for @like do |f| %>
+				<%= form_for @like, html: {style: "display:inline"} do |f| %>
 					<%= f.hidden_field :user_id, value: current_user.id %>
 					<%= f.hidden_field :picture_id, value: pic.id %>
 
 					<%= f.submit '❤️' %> 
-					<br><br>
 				<% end %>
+			<% end %>
+			<% if current_user.id == pic.user.id %>
+				<%= link_to "🗑️", picture_path(pic), method: "DELETE" %>
 			<% end %>
 		<!-- end like button logic -->
 

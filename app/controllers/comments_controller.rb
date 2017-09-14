@@ -8,7 +8,6 @@ class CommentsController < ApplicationController
 	def create
 		@comment = Comment.create(comment_params)
 		@comment.user = User.find_by(id: session[:user_id])
-
 		if @comment.save
 			redirect_to "/pictures/#{@comment.picture.id}"
 		else

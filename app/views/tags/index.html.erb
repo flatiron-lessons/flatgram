@@ -1,6 +1,9 @@
-<h1> Here's a list of all the tags users are using!</h1>
-<fieldset>
-<% @tags.each do |t| %>
-	<%= link_to "#{t.name}", tag_path(t) %><br>
-<% end %>
-</fieldset>
+<h1> Here's a list of all the tags users are using!</h1><br>
+
+<div class="ui grid">
+  <% @tags.each do |t| %>
+    <div class="ui label">
+		<%= link_to "#{t.name}", tag_path(t) %><br>
+    </div>
+  <% end %>
+</div>

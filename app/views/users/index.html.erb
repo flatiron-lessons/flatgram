@@ -31,12 +31,12 @@
 	        </div>
 	        <div class="column">
 	        	<% if !user.pictures.empty? %>
-	        		<%= link_to 'Last Post:', picture_path(user.pictures.last) %><br>
+	        		<%= link_to 'Last Post:', picture_path(user.pictures.last) %><br><br>
 	        	
 	        		<img src="<%= user.pictures.last.image_url %>" height="75px" width="75px">
 	        	<% else %>
 	        		Last Post: <br>
-	        		<br>That user hasn't posted anything yet!
+	        		<br>This user hasn't posted anything yet!
 	        	<% end %>
 	        </div>
 	      </div>

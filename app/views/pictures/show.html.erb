@@ -1,75 +1,93 @@
 <h1> <%= @picture.title %> </h1>
 <h2> Posted by: <%= link_to @picture.user.username, user_path(@picture.user) %> </h2>
-<fieldset>
-	<p><img src="<%= @picture.image_url %>"></p>
+<p><img src="<%= @picture.image_url %>"></p>
+
 <!-- add button for likes here I think -->
-</fieldset>
-<fieldset>
-	Tags: 
-	<% @picture.tags.each do |t| %>
-		<%= link_to "#{t.name}", tag_path(t) %>
+
+
+Tags: 
+<% @picture.tags.each do |t| %>
+	<%= link_to "#{t.name}", tag_path(t) %>
+<% end %>
+
+<% if @picture.likes.count == 1 %>
+	<% if current_user.liked?(@picture) %>
+		<%= "You like this picture" %>
+	<% else %>
+		<%= "#{@picture.likes.count} user likes this." %>
 	<% end %>
+<% elsif @picture.likes.count > 1 %>
+	<%= "#{@picture.likes.count} users like this." %>
+<% else %>
+	<%= "Be the first to show this picture some love!" %>
+<% end %>
 
-	<%= form_for @comment do |f| %>
-		<%= f.label 'new comment' %><br>
-		<%= f.text_area 'content', required: true %><br><br>
-
+<% if current_user.liked?(@picture) %>
+<!-- form to 'unlike' picture -->
+	<%= form_for @like, method: "DELETE", url: like_path do |f| %>
+		<%= f.hidden_field :user_id, value: current_user.id %>
 		<%= f.hidden_field :picture_id, value: @picture.id %>
 
-		<%= f.submit 'Add Comment' %> 
-	<% end %><br>
-
-	<% if @picture.likes.count == 1 %>
-		<% if current_user.liked?(@picture) %>
-			<%= "You like this picture" %>
-		<% else %>
-			<%= "#{@picture.likes.count} user likes this." %>
+		<%= f.submit '💔️' %>
+		<% if current_user.id == @picture.user.id %>
+			<%= link_to "🗑️", picture_path(@picture), method: "DELETE" %>
 		<% end %>
-	<% elsif @picture.likes.count > 1 %>
-		<%= "#{@picture.likes.count} users like this." %>
-	<% else %>
-		<%= "Be the first to show this picture some love!" %>
+		<br><br>
 	<% end %>
-	
-	<% if current_user.liked?(@picture) %>
-	<!-- form to 'unlike' picture -->
-		<%= form_for @like, method: "DELETE", url: like_path do |f| %>
-			<%= f.hidden_field :user_id, value: current_user.id %>
-			<%= f.hidden_field :picture_id, value: @picture.id %>
+<% else %>
+<!-- form to like picture -->
+	<%= form_for @like do |f| %>
+		<%= f.hidden_field :user_id, value: current_user.id %>
+		<%= f.hidden_field :picture_id, value: @picture.id %>
 
-			<%= f.submit '💔️' %>
-			<% if current_user.id == @picture.user.id %>
-				<%= link_to "🗑️", picture_path(@picture), method: "DELETE" %>
-			<% end %>
-			<br><br>
+		<%= f.submit '❤️' %>
+		<% if current_user.id == @picture.user.id %>
+			<%= link_to "🗑️", picture_path(@picture), method: "DELETE" %>
 		<% end %>
-	<% else %>
-	<!-- form to like picture -->
-		<%= form_for @like do |f| %>
-			<%= f.hidden_field :user_id, value: current_user.id %>
-			<%= f.hidden_field :picture_id, value: @picture.id %>
-
-			<%= f.submit '❤️' %>
-			<% if current_user.id == @picture.user.id %>
-				<%= link_to "🗑️", picture_path(@picture), method: "DELETE" %>
-			<% end %>
-			<br><br>
-		<% end %>
+		<br><br>
 	<% end %>
+<% end %>
 
 
-	<p> Comments: </p>
-	<% @picture.comments.each do |comment| %>
-		<fieldset>
-		<%= link_to "#{comment.user.username}", user_path(comment.user) %><br>
-		<p><%= comment.content %><p>
-		<% if session[:user_id] == comment.user.id %>
+<% @picture.comments.each do |comment| %>
+<div class="ui comments">
+  <div class="comment">
+    <a class="avatar">
+      <img src="">
+    </a>
+    <div class="content">
+      <a class="author"><%= comment.user.username %></a>
+      <div class="metadata">
+        <div class="date">1 day ago</div>
+      </div>
+      <div class="text">
+        <p> <%= comment.content %> </p>
+      </div>
+      <div class="actions">
+        <a class="reply">
+          <% if session[:user_id] == comment.user.id %>
 			<%= link_to '✏️', edit_comment_path(comment) %>  
 			<%= link_to '🗑️', comment_path(comment), method: "DELETE" %><br>
-		<% else %>
+		  <% else %>
 			<%= link_to "Reply (It doesn't work right now)" %><br>
-		<% end %>
-		Posted at: <%= comment.created_at %> 
-		</fieldset>
-	<% end %>
-</fieldset>
+		  <% end %>
+        </a>
+      </div>
+    </div>
+  </div>
+  <% end %> 	   
+</div>
+
+
+<%= form_for @comment do |f| %>
+	<%= f.label 'new comment' %><br>
+	<%= f.text_area 'content', required: true, style:"height:200px; width: 400px;" %><br><br>
+
+	<%= f.hidden_field :picture_id, value: @picture.id %>
+
+	<%= f.submit 'Add Comment' %> 
+<% end %><br>
+
+
+
+
